@@ -1,16 +1,18 @@
 import React, { Component, PropTypes } from 'react';
+
+import {ListItem} from 'material-ui/List';
  
-// Task component - represents a single todo item
-export default class Task extends Component {
+// Envent component - represents a single todo item
+export default class Envent extends Component {
   render() {
     return (
-      <li>{this.props.task.text}</li>
+    	<ListItem primaryText={this.props.event.text} />
     );
   }
 }
  
-Task.propTypes = {
+Envent.propTypes = {
   // This component gets the task to display through a React prop.
   // We can use propTypes to indicate it is required
-  task: PropTypes.object.isRequired,
+  event: PropTypes.object.isRequired,
 };

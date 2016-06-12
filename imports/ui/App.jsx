@@ -1,34 +1,41 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+
+import { createContainer } from 'meteor/react-meteor-data';
+import { Events } from '../api/events.js';
  
-import Task from './Task.jsx';
+import Event from './Event.jsx';
+import {List} from 'material-ui/List';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
  
 // App component - represents the whole app
-export default class App extends Component {
-  getTasks() {
-    return [
-      { _id: 1, text: 'This is task 1' },
-      { _id: 2, text: 'This is task 2' },
-      { _id: 3, text: 'This is task 3' },
-    ];
-  }
- 
-  renderTasks() {
-    return this.getTasks().map((task) => (
-      <Task key={task._id} task={task} />
+class App extends Component {
+  renderEvents() {
+    return This.props.events.map((event) => (
+      <Task key={event._id} event={event} />
     ));
   }
- 
   render() {
     return (
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
       <div className="container">
         <header>
-          <h1>Todo List</h1>
+          <h1>Cehu List</h1>
         </header>
- 
-        <ul>
-          {this.renderTasks()}
-        </ul>
+        {this.renderEvents()}
       </div>
+      </MuiThemeProvider>
     );
   }
 }
+
+App.propTypes = {
+  events: PropTypes.array.isRequired,
+};
+ 
+export default createContainer(() => {
+  return {
+    events: Events.find({}).fetch(),
+  };
+}, App);

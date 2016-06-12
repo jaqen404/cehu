@@ -7,5 +7,5 @@ import App from '../imports/ui/App.jsx';
  
 Meteor.startup(() => {
 	injectTapEventPlugin();
-  render(<App />, document.getElementById('render-target'));
+ 	render(<App />, document.getElementById('render-target'));
 });
