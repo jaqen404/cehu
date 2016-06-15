@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Events } from '../../api/events.js';
 import { Link } from 'react-router';
 
 export default class AdminEvent extends Component {
 	deleteThisEvent() {
-    Events.remove(this.props.event._id);
+    Meteor.call('events.remove',this.props.event._id);
   }
 
   editThisEvent() {
@@ -20,7 +21,7 @@ export default class AdminEvent extends Component {
         
           <Link to='/edit'><button className="edit" onClick={this.editThisEvent.bind(this)} /></Link>
 
-        <span className="text">{this.props.event.text}</span>
+        <span className="text">{this.props.event.title}</span>
       </li>
     );
   }
