@@ -1,30 +1,30 @@
-import React from 'react';
+import React, { Component,PropTypes } from 'react';
+import { Meteor } from 'meteor/meteor';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import { Link, browserHistory } from 'react-router';
 
-function goLogout() {
-  Meteor.logout();
-  browserHistory.push('/');
+export default class MyAppBar extends Component {
+  goLogin(e) {
+    const path = "/login";
+    browserHistory.push(path);
+  }
+  goLogout(e) {
+    Meteor.logout();
+    browserHistory.push('/');
+  }
+
+  render() {
+    return (
+      <AppBar
+        title={<span>测乎</span>}
+        onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap.bind(this)}
+        iconElementRight={this.props.currentUser ? <FlatButton value="logout" label="登出" onClick={this.goLogout} /> : <FlatButton label="登录"  onClick={this.goLogin} />}
+    />);
+  }
 }
 
-function goLogin() {
-  const path = "/login";
-  browserHistory.push(path);
-}
-
-const styles = {
-  title: {
-    cursor: 'pointer',
-  },
+MyAppBar.PropTypes = {
+  currentUser: PropTypes.string.isRequired,
 };
-
-const MyAppBar = () => (
-  <AppBar
-    title={<span style={styles.title}>测乎</span>}
-    iconElementRight={Meteor.userId() ? <FlatButton label="登出" onClick={goLogout} /> : <FlatButton label="登录"  onClick={goLogin} />}
-  />
-);
-
-export default MyAppBar;

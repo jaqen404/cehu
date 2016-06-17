@@ -7,6 +7,7 @@ import EventsList from '../pages/EventsList.jsx';
 export default createContainer(() => {
 	Meteor.subscribe('events');
   return {
+  	currentUser: Meteor.userId(),
     events: Events.find({}, { sort: { createdAt: -1 } }).fetch(),
   };
 }, EventsList);

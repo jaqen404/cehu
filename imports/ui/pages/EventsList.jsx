@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import Event from '../components/Event.jsx';
  
 // App component - represents the whole app
-export default class Home extends Component {
+export default class EventsList extends Component {
   renderEvents() {
     return this.props.events.map((event) => (
       <Event key={event._id} event={event} />
@@ -22,6 +22,7 @@ export default class Home extends Component {
   }
 }
 
-Home.propTypes = {
+EventsList.PropTypes = {
+  currentUser: PropTypes.string.isRequired,
   events: PropTypes.array.isRequired,
 };

@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
-import UsersEvents from './usersevents.js';
  
 export const Events = new Mongo.Collection('events');
 
@@ -36,23 +35,5 @@ Meteor.methods({
     check(eventId, String);
  
     Events.remove(eventId);
-  },
-  'usersevents.insert'(eventId,answer) {
-    check(eventId, String);
-    check(answer, String);
- 
-    // Make sure the user is logged in before inserting a task
-    // if (! Meteor.userId()) {
-    //   throw new Meteor.Error('not-authorized');
-    // }
- 
-    UsersEvents.insert({
-      eventId,
-      answer,
-      userId: Meteor.userId(),
-      createdAt: new Date(),
-      // owner: Meteor.userId(),
-      // username: Meteor.user().username,
-    });
   },
 });

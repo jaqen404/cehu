@@ -4,5 +4,6 @@ import App from '../layouts/App.jsx';
 
 export default createContainer(() => {
   return {
+  	currentUser: Meteor.userId(),
   };
 }, App);

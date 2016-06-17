@@ -6,7 +6,7 @@ import {Events} from '../../api/events.js';
 
 export default class NewEvent extends Component {
   handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
     const title = e.target.elements[0].value.trim();
     const text = e.target.elements[1].value;
     const answers = e.target.elements[2].value.trim().split(',');
