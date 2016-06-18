@@ -36,4 +36,6 @@ Meteor.methods({
  
     Events.remove(eventId);
   },
+  // 'events.up'
+  // Tasks.update(taskId, { $set: { private: setToPrivate } });
 });

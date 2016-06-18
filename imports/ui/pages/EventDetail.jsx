@@ -27,7 +27,10 @@ export default class EventDetail extends Component {
                 style={answerStyle}
         />
       ));
-      return <RadioButtonGroup name="shipSpeed" defaultSelected={defaultAnswer}>{radioButtons}</RadioButtonGroup>;
+      return answers ? <form onSubmit={this.handleSubmit.bind(this)}>
+                <RadioButtonGroup name="shipSpeed" defaultSelected={defaultAnswer}>{radioButtons}</RadioButtonGroup>
+                <FlatButton label="确定" type="submit"/>
+              </form> : '';
     }
   }
   handleSubmit(e) {
@@ -47,7 +50,8 @@ export default class EventDetail extends Component {
         marginBottom: 16,
       },
       card: {
-        margin: 50,
+        marginRight: 50,
+        marginTop: 15,
       },
     };
   	const { event, eventExists } = this.props;
@@ -62,10 +66,7 @@ export default class EventDetail extends Component {
           {event.text}
         </CardText>
         <CardActions>
-          <form onSubmit={this.handleSubmit.bind(this)}>
-            {this.renderAnswers()}
-            <FlatButton label="确定" type="submit"/>
-          </form>
+          {this.renderAnswers()}  
         </CardActions>
       </Card>
     );
