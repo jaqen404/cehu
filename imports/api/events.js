@@ -12,9 +12,11 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-  'events.insert'(title,text,answers) {
+  'events.insert'(title,text,answers,publishDate,publishTime) {
     check(title, String);
     check(text, String);
+    check(publishDate, String);
+    check(publishTime, String);
     check(answers, Array);
  
     // Make sure the user is logged in before inserting a task
@@ -26,6 +28,8 @@ Meteor.methods({
     	title,
       text,
       answers,
+      publishTime,
+      publishDate,
       createdAt: new Date(),
       // owner: Meteor.userId(),
       // username: Meteor.user().username,

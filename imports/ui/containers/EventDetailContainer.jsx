@@ -5,7 +5,6 @@ import EventDetail from '../pages/EventDetail.jsx';
 
 export default createContainer(({ params: { id } }) => {
 	Meteor.subscribe('events');
-  console.log(Events.findOne(id));
   const event = Events.findOne(id);
   const eventExists = !!event;
   return {

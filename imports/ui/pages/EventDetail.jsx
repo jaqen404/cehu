@@ -29,7 +29,7 @@ export default class EventDetail extends Component {
       ));
       return answers ? <form onSubmit={this.handleSubmit.bind(this)}>
                 <RadioButtonGroup name="shipSpeed" defaultSelected={defaultAnswer}>{radioButtons}</RadioButtonGroup>
-                <FlatButton label="确定" type="submit"/>
+                {this.props.isPreview ? '' : <FlatButton label="确定" type="submit"/>}
               </form> : '';
     }
   }
@@ -52,10 +52,10 @@ export default class EventDetail extends Component {
       card: {
         marginRight: 50,
         marginTop: 15,
+        marginBottom: 50,
       },
     };
   	const { event, eventExists } = this.props;
-  	console.log(eventExists);
   	// if (!eventExists) {
   	// 	return <h1>not found</h1>
   	// }
