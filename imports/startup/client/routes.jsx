@@ -9,12 +9,14 @@ import EventDetail from '../../ui/containers/EventDetailContainer.jsx';
 import DoneEvents from '../../ui/containers/DoneEventsContainer.jsx';
 import AuthPageLogin from '../../ui/pages/AuthPageLogin.jsx';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.jsx';
+import EditEventContainer from '../../ui/containers/EditEventContainer.jsx'
 
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path='/' component={App} >
     	<IndexRoute component={Home} />
     	<Route path='admin' component={Admin} />
+        <Route path='edit/:id' component={EditEventContainer} />
     	<Route path='newevent' component={NewEvent} />
     	<Route path='eventdetail/:id' component={EventDetail} />
     	<Route path="login" component={AuthPageLogin}/>

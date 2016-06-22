@@ -68,7 +68,7 @@ export default class NavBar extends Component {
     };
     return (
       <div style={styles.container}>
-        <FlatButton label='大厅' value='/' labelStyle={this.getLabelStyle('/')} icon={<HomeIcon mystyles={styles.icon} mycolor={this.getIconColor('/')} />}  onClick={this.handleClick.bind(this)} style={styles.button}/>
+        <FlatButton label='事件大厅' value='/' labelStyle={this.getLabelStyle('/')} icon={<HomeIcon mystyles={styles.icon} mycolor={this.getIconColor('/')} />}  onClick={this.handleClick.bind(this)} style={styles.button}/>
         <FlatButton label='我的预测' value='/done' labelStyle={this.getLabelStyle('/done')} icon={<AssignmentTurnedIn mystyles={styles.icon} mycolor={this.getIconColor('/done')} />} onClick={this.handleClick.bind(this)} style={styles.button}/>
         <FlatButton label='管理' value='/admin' labelStyle={this.getLabelStyle('/admin')} icon={<SupervisorAccount mystyles={styles.icon} mycolor={this.getIconColor('/admin')} />} onClick={this.handleClick.bind(this)} style={styles.button}/>
       </div>

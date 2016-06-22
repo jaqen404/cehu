@@ -22,9 +22,11 @@ export default class App extends Component {
       container: {
         display: 'flex',
         width: '100%',
+        height: '100%'
       },
       main: {
-        width: '100%'
+        width: '100%',
+        height: '100%',
       },
     };
     return (

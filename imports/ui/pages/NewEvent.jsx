@@ -8,6 +8,8 @@ import {Card} from 'material-ui/Card';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import EventDetail from './EventDetail'
 
 export default class NewEvent extends Component {
@@ -20,33 +22,57 @@ export default class NewEvent extends Component {
       minDate: minDate,
       autoOk: false,
       disableYearSelection: false,
-      event: {},
-      isPreview: false,
+      event: {rightIndex: '-1',answers: []},
+      isUpdate: false,
     };
   }
-  handleSubmit(e) {
-    e.preventDefault();
-    const event = {title,text,answers,publishDate,publishTime} = this.getData(e);
-    if (this.state.isPreview) {
-      this.setState({event: event});
-      this.setState({isPreview: false});
-    } else {
-      Meteor.call('events.insert', title, text, answers,publishDate,publishTime);
-      const path = "/admin";
-      browserHistory.push(path);
+  componentWillMount() {
+    if (this.props.event) {
+      let event = this.state.event; 
+      for(let p in this.props.event) { 
+        let name = p;//属性名称 
+        let value = this.props.event[p];//属性对应的值 
+        event[name] = value; 
+      } 
+      this.setState({event: event,isUpdate: this.context.router.isActive(`/edit/${this.props.event._id}`)});
     }
   }
-  preview() {
-    this.setState({isPreview: true});
+  // componentDidMount() {
+  //   console.log('componentDidMount');
+  // }
+  // componentWillReceiveProps() {
+  //   console.log('componentWillReceiveProps');
+  // }
+  handleSubmit(e) {
+    e.preventDefault();
+    Meteor.call('events.insert', this.state.event, this.props.event.rightIndex ? this.props.event.rightIndex : '-1');
+    const path = "/admin";
+    browserHistory.push(path);
   }
-  getData(e) {
-    const title = e.target.elements[0].value.trim();
-    const text = e.target.elements[2].value;
-    const answers = e.target.elements[4].value.trim().split(',').filter((item)=>(!!item));
-    const publishDate = e.target.elements[6].value;
-    const publishTime = e.target.elements[7].value;
-    return {title,text,answers,publishDate,publishTime};
+  renderMenuItems() {
+    return this.state.event.answers.map((answer,index) => (
+      <MenuItem key={index} value={index} primaryText={answer} />
+    ));
+    
   }
+  formChange(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    const state = this.state;
+    const event = this.state.event;
+    if (name == 'answers') {
+      event[name] = value.trim().split(',').filter((item)=>(!!item));
+    } else {
+      event[name] = value.trim();
+    }
+    this.setState({event: event});
+  }
+  handleChange(e, index, rightIndex) {
+    let event = this.state.event;
+    event.rightIndex = rightIndex;
+    event.rightAnswer = event.answers[rightIndex];
+    this.setState({event: event});
+  } 
   render() {
     const styles = {
       card: {
@@ -56,43 +82,68 @@ export default class NewEvent extends Component {
       },
       button: {
         margin: 12,
+      },
+      selectField: {
+        marginBottom: 50,
+        marginTop: 50,
       }
     };
     return (
       <div>
       <Card style={styles.card}>
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit.bind(this)} onChange={this.formChange.bind(this)}>
         <TextField
           hintText="event title"
           floatingLabelText="标题"
           multiLine={true}
           rows={2}
+          defaultValue={this.state.event.title}
+          name="title"
         /><br />
         <TextField
-          hintText="event text"
+          hintText="event dddtext"
           floatingLabelText="简介"
           multiLine={true}
           rows={2}
+          defaultValue={this.state.event.text}
+          name="text"
         /><br />
         <TextField
           hintText="event answers"
           floatingLabelText="选项（注意用英文逗号分隔）"
           multiLine={true}
           rows={2}
+          defaultValue={this.state.event.answers ? this.state.event.answers.join() : ''}
+          name="answers"
         />
         <DatePicker
           floatingLabelText="揭晓日期"
           autoOk={this.state.autoOk}
           minDate={this.state.minDate}
           disableYearSelection={this.state.disableYearSelection}
+          name="publishDate"
         />
         <TimePicker
           format="24hr"
           hintText="24hr Format"
           floatingLabelText="揭晓时间"
-        /><br /><br /><br /><br />
-        <RaisedButton type="submit" label="提交" primary={true} style={styles.button} />
-        <RaisedButton type="submit" label="预览" secondary={true} style={styles.button} onTouchTap={this.preview.bind(this)}/>
+          name="publishTime"
+        />
+        <SelectField
+          value={this.state.event.rightIndex}
+          onChange={this.handleChange.bind(this)}
+          autoWidth={false}
+          style={styles.selectField}
+          name="rightIndex"
+          floatingLabelText="揭晓预测答案"
+        >
+          <MenuItem value="-1" primaryText="未揭晓" />
+          {this.renderMenuItems()}
+        </SelectField><br /><br /><br />
+        {this.state.isUpdate ? 
+          <RaisedButton type="submit" label="保存" primary={true} style={styles.button} /> :
+          <RaisedButton type="submit" label="新建" primary={true} style={styles.button} />
+        }
       </form>
       </Card>
       <EventDetail eventExists={true} event={this.state.event} isPreview={true}/>
@@ -100,3 +151,12 @@ export default class NewEvent extends Component {
     );
   }
 }
+
+NewEvent.propTypes = {
+  event: PropTypes.object,
+  eventExists: PropTypes.bool,
+};
+
+NewEvent.contextTypes = {
+  router: React.PropTypes.object.isRequired,
+};

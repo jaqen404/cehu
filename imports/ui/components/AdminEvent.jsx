@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Events } from '../../api/events.js';
-import { Link } from 'react-router';
+import { Link,browserHistory } from 'react-router';
 
 export default class AdminEvent extends Component {
 	deleteThisEvent() {
@@ -9,7 +9,8 @@ export default class AdminEvent extends Component {
   }
 
   editThisEvent() {
-
+    const path = `/edit/${this.props.event._id}`;
+    browserHistory.push(path);
   }
 
   render() {
@@ -18,9 +19,9 @@ export default class AdminEvent extends Component {
       	<button className="delete" onClick={this.deleteThisEvent.bind(this)}>
           &times;
         </button>
-        
-          <Link to='/edit'><button className="edit" onClick={this.editThisEvent.bind(this)} /></Link>
-
+        <button className="delete" onClick={this.editThisEvent.bind(this)}>
+          &times;
+        </button>
         <span className="text">{this.props.event.title}</span>
       </li>
     );
