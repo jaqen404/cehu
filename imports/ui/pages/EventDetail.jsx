@@ -2,21 +2,56 @@ import React, { Component, PropTypes } from 'react';
 import { browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 
-import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
+import {Card, CardHeader, CardMedia, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import FavoriteIcon from '../styles/icons/favorite';
+import FavoriteBorderIcon from '../styles/icons/favorite-border';
+
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+
 import UsersEvents from '../../api/usersevents.js';
-import {secondary_text,divider_color,white} from '../styles/colors'
+import {secondary_text,divider_color,white,accent_color,primary_color} from '../styles/colors';
+import {dateFormat} from '../../api/utils';
 
 export default class EventDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       defaultSelected: '0',
+      eventState: '揭晓结果：未揭晓',
+      myState: '我的预测：未预测',
+      result: '我的预测：未预测   |   我的预测：未预测',
     };
+  }
+  componentWillMount() {
+    this.getResult();
+  }  
+  getResult() {
+    let state = this.state;
+    const props = this.props;
+    let isRight = '';
+    if (props.event.rightIndex >= 0) {
+      state.eventState = '揭晓结果：' + props.event.rightAnswer;
+    } else if (!!props.event.publishDate || !!props.event.publishTime) {
+      const date = props.event.publishDate ? dateFormat(props.event.publishDate, 'yyyy-MM-dd') : '';
+      const time = props.event.publishTime ? dateFormat(props.event.publishTime, 'hh:mm') : '';
+      state.eventState = '揭晓结果：未揭晓，揭晓时间' + date + ' | ' + time;
+    }
+    if (props.userEvent) {
+      state.myState = '我的预测：' + props.userEvent.answer;
+    }
+    if (props.event.rightIndex >= 0 && !!props.userEvent) {
+      if (props.userEvent.isRight) {
+        isRight = '   |   预测成功';
+      } else {
+        isRight = '   |   预测失败'
+      }
+    } 
+    state.result = state.myState + ' | ' + state.eventState + isRight;
+    return state.result;
   }
   renderAnswers() {
     const answerStyle = {
@@ -37,9 +72,29 @@ export default class EventDetail extends Component {
       ));
       return answers ? <form onSubmit={this.handleSubmit.bind(this)}>
                 <RadioButtonGroup name="radios" ref ="radios" defaultSelected={this.props.userEvent ? this.props.userEvent.answerIndex : '0'}>{radioButtons}</RadioButtonGroup>
-                {!!this.props.isPreview || !!this.props.userEvent ? '' : <FlatButton label="确定" type="submit"/>}
+                {!!this.props.isPreview || !!this.props.userEvent || this.props.event.rightIndex >= 0 ? '' : <FlatButton label="确定" type="submit"/>}
+                {this.renderRsultRadioButton()}
               </form> : '';
     }
+  }
+  renderRsultRadioButton() {
+    return (
+      this.props.event.rightIndex >= 0 ? 
+        <div>
+          <br />
+          <h4>事件结果:</h4>
+          <RadioButtonGroup name="RightRadios" defaultSelected={`${this.props.event.rightIndex}`}>
+            <RadioButton
+                value={`${this.props.event.rightIndex}`}
+                label={this.props.event.rightAnswer}
+                key={0}
+                checkedIcon={<ActionFavorite color={accent_color}/>}
+                uncheckedIcon={<ActionFavoriteBorder color={accent_color}/>}
+        />
+          </RadioButtonGroup>
+        </div> 
+      : ''
+    );
   }
   handleSubmit(e) {
     e.preventDefault()
@@ -59,16 +114,18 @@ export default class EventDetail extends Component {
         marginBottom: 16,
       },
       card: {
-        marginRight: 50,
-        marginBottom: 50,
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        width: '60%',
+        paddingBottom: 50,
       },
       container: {
         background: 'SlateGray',
+        paddingBottom: 150,
       },
       bigBanner: {
         background: 'url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/68939/ae.jpg) center 1%',
         backgroundSize: 'cover',
-        marginBottom: 30,
         width: '100%',
         height: 250,
       },
@@ -77,9 +134,13 @@ export default class EventDetail extends Component {
       },
       blockquote: {
         background: white,
-        padding: '4em 2em 4em',
         marginLeft: 'auto',
         marginRight: 'auto',
+        width: '80%',
+        minWidth: 320,
+      },
+      centerText: {
+        textAlign: 'center',
       },
     };
   	const { event, eventExists } = this.props;
@@ -87,19 +148,19 @@ export default class EventDetail extends Component {
   	// 	return <h1>not found</h1>
   	// }
     return (
-      <Paper zDepth={1} style={styles.container}>
-        <Paper zDepth={2} style={styles.blockquote} rounded={false}>
-          <span>{event.title}</span>
-        </Paper>
-        <Paper zDepth={3} style={styles.bigBanner}>
-          <div style={styles.large}>
-          </div>
-        </Paper>
+      <Paper zDepth={0} style={styles.container}>
+        <Card style={styles.blockquote}>
+          <CardTitle  title={event.title} subtitle={this.getResult()}/>
+        </Card>
+        <Card zDepth={2}>
+          <CardMedia>
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68939/ae.jpg" />
+          </CardMedia>
+        </Card>
+        <Card style={styles.blockquote}>
+          <CardText color={secondary_text}>{event.text}</CardText>
+        </Card>
         <Card style={styles.card}>
-          <CardTitle title={event.title} subtitle="" />
-          <CardText>
-            {event.text}
-          </CardText>
           <CardActions>
             {this.renderAnswers()}  
           </CardActions>

@@ -11,6 +11,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import EventDetail from './EventDetail'
+import {dateFormat} from '../../api/utils';
 
 export default class NewEvent extends Component {
   constructor(props) {
@@ -37,15 +38,13 @@ export default class NewEvent extends Component {
       this.setState({event: event,isUpdate: this.context.router.isActive(`/edit/${this.props.event._id}`)});
     }
   }
-  // componentDidMount() {
-  //   console.log('componentDidMount');
-  // }
-  // componentWillReceiveProps() {
-  //   console.log('componentWillReceiveProps');
-  // }
   handleSubmit(e) {
     e.preventDefault();
-    Meteor.call('events.insert', this.state.event, this.props.event.rightIndex ? this.props.event.rightIndex : '-1');
+    let oldRightIndex = '-1';
+    if (this.props.event) {
+      oldRightIndex = this.props.event.rightIndex;
+    } 
+    Meteor.call('events.insert', this.state.event, oldRightIndex); 
     const path = "/admin";
     browserHistory.push(path);
   }
@@ -65,6 +64,16 @@ export default class NewEvent extends Component {
     } else {
       event[name] = value.trim();
     }
+    this.setState({event: event});
+  }
+  handleDateChange(e, date) {
+    let event = this.state.event;
+    event.publishDate = date;
+    this.setState({event: event});
+  }
+  handleTimeChange(e, time) {
+    const event = this.state.event;
+    event.publishTime = time;
     this.setState({event: event});
   }
   handleChange(e, index, rightIndex) {
@@ -88,6 +97,7 @@ export default class NewEvent extends Component {
         marginTop: 50,
       }
     };
+    const event = this.state.event;
     return (
       <div>
       <Card style={styles.card}>
@@ -97,7 +107,7 @@ export default class NewEvent extends Component {
           floatingLabelText="标题"
           multiLine={true}
           rows={2}
-          defaultValue={this.state.event.title}
+          defaultValue={event.title}
           name="title"
         /><br />
         <TextField
@@ -105,7 +115,7 @@ export default class NewEvent extends Component {
           floatingLabelText="简介"
           multiLine={true}
           rows={2}
-          defaultValue={this.state.event.text}
+          defaultValue={event.text}
           name="text"
         /><br />
         <TextField
@@ -113,7 +123,7 @@ export default class NewEvent extends Component {
           floatingLabelText="选项（注意用英文逗号分隔）"
           multiLine={true}
           rows={2}
-          defaultValue={this.state.event.answers ? this.state.event.answers.join() : ''}
+          defaultValue={event.answers ? event.answers.join() : ''}
           name="answers"
         />
         <DatePicker
@@ -122,12 +132,16 @@ export default class NewEvent extends Component {
           minDate={this.state.minDate}
           disableYearSelection={this.state.disableYearSelection}
           name="publishDate"
+          onChange={this.handleDateChange.bind(this)}
+          defaultDate={event.publishDate ? event.publishDate : new Date()}
         />
         <TimePicker
           format="24hr"
           hintText="24hr Format"
           floatingLabelText="揭晓时间"
           name="publishTime"
+          onChange={this.handleTimeChange.bind(this)}
+          value={event.publishTime ? event.publishTime : new Date()}
         />
         <SelectField
           value={this.state.event.rightIndex}
@@ -147,6 +161,7 @@ export default class NewEvent extends Component {
       </form>
       </Card>
       <EventDetail eventExists={true} event={this.state.event} isPreview={true}/>
+      <br /> <br /> <br /> <br /><br /> <br /> <br /> <br /><br /> <br /> <br /> <br />
       </div>
     );
   }
