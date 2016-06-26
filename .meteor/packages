@@ -20,3 +20,5 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 react-meteor-data
 
 accounts-password
+alanning:roles
+meteortoys:allthings

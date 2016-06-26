@@ -11,11 +11,18 @@ import AuthPageLogin from '../../ui/pages/AuthPageLogin.jsx';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.jsx';
 import EditEventContainer from '../../ui/containers/EditEventContainer.jsx'
 
+function toAdmin(nextState, replaceState) {
+    // const currentUser = Meteor.userId();
+    // const isAdmin = Roles.userIsInRole(currentUser || '', 'super-admin');
+    // if (!isAdmin) {
+    //      replaceState(null, '/');
+    // }
+}
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path='/' component={App} >
     	<IndexRoute component={Home} />
-    	<Route path='admin' component={Admin} />
+    	<Route path='admin' component={Admin} onEnter={toAdmin}/>
         <Route path='edit/:id' component={EditEventContainer} />
     	<Route path='newevent' component={NewEvent} />
     	<Route path='eventdetail/:id' component={EventDetail} />

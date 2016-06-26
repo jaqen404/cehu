@@ -6,7 +6,11 @@ import Admin from '../pages/Admin.jsx';
 
 export default createContainer(() => {
 	Meteor.subscribe('events');
+	Meteor.subscribe('userData');
+	const isAdmin = Roles.userIsInRole(Meteor.userId(), 'super-admin');
+	console.log(isAdmin);
   return {
      events: Events.find({}, { sort: { createdAt: -1 } }).fetch(),
+     isAdmin: isAdmin,
   };
 }, Admin);

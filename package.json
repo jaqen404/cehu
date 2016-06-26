@@ -5,7 +5,10 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "codemirror": "^5.16.0",
+    "css-loader": "^0.23.1",
     "install": "^0.8.1",
+    "marked": "^0.3.5",
     "material-ui": "^0.15.1",
     "meteor-node-stubs": "~0.2.0",
     "npm": "^3.9.5",
@@ -13,6 +16,7 @@
     "react-addons-pure-render-mixin": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-router": "^2.4.1",
+    "react-rte": "^0.3.0",
     "react-tap-event-plugin": "^1.0.0"
   }
 }

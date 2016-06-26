@@ -6,7 +6,6 @@ import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import ContentClear from 'material-ui/svg-icons/content/clear';
-import { UsersEvents } from '../../api/usersevents.js';
 import {accent_color,primary_color,dark_primary_color} from '../styles/colors';
  
 // Envent component - represents a single todo item
@@ -16,9 +15,8 @@ export default class Envent extends Component {
     browserHistory.push(path);
 	}
   renderIcon() {
-    Meteor.subscribe('usersevents');
     const event = this.props.event;
-    const userEvent = UsersEvents.findOne({userId: Meteor.userId(),eventId: event._id});
+    const userEvent = this.props.userEvent;
     if (!userEvent && event.rightIndex < 0) {
       return <ActionFavoriteBorder color={primary_color}/>;
     } else if (!!userEvent && event.rightIndex < 0) {
@@ -42,4 +40,5 @@ Envent.propTypes = {
   // This component gets the task to display through a React prop.
   // We can use propTypes to indicate it is required
   event: PropTypes.object,
+  userEvent: PropTypes.object,
 };

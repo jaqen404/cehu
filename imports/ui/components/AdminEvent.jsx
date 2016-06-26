@@ -3,26 +3,26 @@ import { Meteor } from 'meteor/meteor';
 import { Events } from '../../api/events.js';
 import { Link,browserHistory } from 'react-router';
 
-export default class AdminEvent extends Component {
-	deleteThisEvent() {
-    Meteor.call('events.remove',this.props.event._id);
-  }
+import FlatButton from 'material-ui/FlatButton';
 
+export default class AdminEvent extends Component {
   editThisEvent() {
     const path = `/edit/${this.props.event._id}`;
     browserHistory.push(path);
   }
 
   render() {
+    const styles = {
+      item: {
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'space-around',
+      }
+    }
     return (
-      <li>
-      	<button className="delete" onClick={this.deleteThisEvent.bind(this)}>
-          &times;
-        </button>
-        <button className="delete" onClick={this.editThisEvent.bind(this)}>
-          &times;
-        </button>
-        <span className="text">{this.props.event.title}</span>
+      <li style={styles.item}>
+        <span>{this.props.event.title}</span>
+        <FlatButton label="修改" primary={true} onClick={this.editThisEvent.bind(this)} />
       </li>
     );
   }

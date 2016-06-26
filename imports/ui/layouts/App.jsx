@@ -22,20 +22,33 @@ export default class App extends Component {
       container: {
         display: 'flex',
         width: '100%',
-        height: '100%'
+        height: '100%',
+        marginTop: 60,
       },
       main: {
         width: '100%',
         height: '100%',
+        marginLeft: 200,
       },
+      navBar: {
+        position: 'fixed',
+        width: '200px',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '15px',
+      },
+      appBar: {
+        position: 'fixed',
+        top: 0,
+      }
     };
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
       <div>
-        <MyAppBar onLeftIconButtonTouchTap={this.toggleDrawer.bind(this)} currentUser={this.props.currentUser}/>  
+        <MyAppBar style={styles.appBar} onLeftIconButtonTouchTap={this.toggleDrawer.bind(this)} currentUser={this.props.currentUser}/>  
         <MyAppDrawer ref='drawer' currentUser={this.props.currentUser} />
         <div style={styles.container} >
-          <NavBar />
+          <NavBar style={styles.navBar} currentUser={this.props.currentUser} isAdmin={this.props.isAdmin}/>
           <div style={styles.main} >
             { this.props.children }
           </div>

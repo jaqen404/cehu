@@ -2,6 +2,7 @@ import React from 'react';
 import AuthPage from './AuthPage.jsx';
 import { Link } from 'react-router';
 import { Accounts } from 'meteor/accounts-base';
+// import { Roles } from 'meteor/alanning_roles';
 
 export default class JoinPage extends React.Component {
   constructor(props) {

@@ -16,7 +16,7 @@ export default class DoneEvents extends Component {
     };
     return (
       <Paper zDepth={1} >
-        <EventsList currentUser={this.props.currentUser} events={this.props.events}/>
+        <EventsList currentUser={this.props.currentUser} events={this.props.events} usersEvents={this.props.usersEvents}/>
       </Paper>
     );
   }
@@ -25,4 +25,5 @@ export default class DoneEvents extends Component {
 DoneEvents.PropTypes = {
   currentUser: PropTypes.string.isRequired,
   events: PropTypes.array.isRequired,
+  usersEvents: PropTypes.array,
 };

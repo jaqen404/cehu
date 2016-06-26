@@ -18,6 +18,7 @@ export default class MyAppBar extends Component {
   render() {
     return (
       <AppBar
+        style={this.props.style}
         title={<span>测乎</span>}
         onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap.bind(this)}
         iconElementRight={this.props.currentUser ? <FlatButton value="logout" label="登出" onClick={this.goLogout} /> : <FlatButton label="登录"  onClick={this.goLogin} />}

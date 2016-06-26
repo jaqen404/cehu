@@ -8,6 +8,8 @@ import {Card} from 'material-ui/Card';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import EventDetail from './EventDetail'
@@ -25,6 +27,7 @@ export default class NewEvent extends Component {
       disableYearSelection: false,
       event: {rightIndex: '-1',answers: []},
       isUpdate: false,
+      dialogOpen: false,
     };
   }
   componentWillMount() {
@@ -42,7 +45,7 @@ export default class NewEvent extends Component {
     e.preventDefault();
     let oldRightIndex = '-1';
     if (this.props.event) {
-      oldRightIndex = this.props.event.rightIndex;
+      oldRightIndex = `${this.props.event.rightIndex}`;
     } 
     Meteor.call('events.insert', this.state.event, oldRightIndex); 
     const path = "/admin";
@@ -82,6 +85,18 @@ export default class NewEvent extends Component {
     event.rightAnswer = event.answers[rightIndex];
     this.setState({event: event});
   } 
+  handleOpen() {
+    this.setState({dialogOpen: true});
+  };
+
+  handleClose() {
+    this.setState({dialogOpen: false});
+  };
+  deleteThisEvent() {
+    Meteor.call('events.remove',this.props.event._id);
+    this.handleClose();
+    this.context.router.push('/admin');
+  }
   render() {
     const styles = {
       card: {
@@ -97,6 +112,18 @@ export default class NewEvent extends Component {
         marginTop: 50,
       }
     };
+    const actions = [
+      <FlatButton
+        label="取消"
+        primary={true}
+        onTouchTap={this.handleClose.bind(this)}
+      />,
+      <FlatButton
+        label="删除"
+        primary={true}
+        onTouchTap={this.deleteThisEvent.bind(this)}
+      />,
+    ];
     const event = this.state.event;
     return (
       <div>
@@ -125,7 +152,15 @@ export default class NewEvent extends Component {
           rows={2}
           defaultValue={event.answers ? event.answers.join() : ''}
           name="answers"
-        />
+        /><br />
+        <TextField
+          hintText="event answers"
+          floatingLabelText="图片url（注意不要加引号）"
+          multiLine={true}
+          rows={2}
+          defaultValue={event.pic}
+          name="pic"
+        /><br />
         <DatePicker
           floatingLabelText="揭晓日期"
           autoOk={this.state.autoOk}
@@ -155,13 +190,21 @@ export default class NewEvent extends Component {
           {this.renderMenuItems()}
         </SelectField><br /><br /><br />
         {this.state.isUpdate ? 
-          <RaisedButton type="submit" label="保存" primary={true} style={styles.button} /> :
+          <div><RaisedButton type="submit" label="保存" primary={true} style={styles.button} /><RaisedButton label="删除" secondary={true} onTouchTap={this.handleOpen.bind(this)}/></div> :
           <RaisedButton type="submit" label="新建" primary={true} style={styles.button} />
         }
       </form>
       </Card>
       <EventDetail eventExists={true} event={this.state.event} isPreview={true}/>
-      <br /> <br /> <br /> <br /><br /> <br /> <br /> <br /><br /> <br /> <br /> <br />
+      <br /> <br /> <br /> <br /><br /> <br /> <br /> <br />
+        <Dialog
+            actions={actions}
+            modal={false}
+            open={this.state.dialogOpen}
+            onRequestClose={this.handleClose}
+          >
+            Discard draft?
+        </Dialog>
       </div>
     );
   }

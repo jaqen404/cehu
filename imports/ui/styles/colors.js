@@ -36,4 +36,6 @@ export const muiTheme = {
     appBar: {
     	height: 60,
   	},
+    toolbar: {
+    }
   };

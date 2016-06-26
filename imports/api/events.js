@@ -7,14 +7,17 @@ export const Events = new Mongo.Collection('events');
 
 if (Meteor.isServer) {
   // This code only runs on the server
-  Meteor.publish('events', function tasksPublication() {
+  Meteor.publish('events', function() {
     return Events.find();
+  });
+  Meteor.publish('eventsByUserId', function() {
+    const eventsIds = UsersEvents.find({userId: this.userId}, { eventId: 1, _id:0 }).fetch().map((userevent)=>(userevent.eventId));
+    return Events.find({ _id: { $in: eventsIds }});
   });
 }
 
 Meteor.methods({
   'events.insert'(event, oldRightIndex) {
-  	const {title,text,answers,publishDate,publishTime,rightAnswer,rightIndex} = event;
     check(event, Object);
     check(oldRightIndex, String);
     // Make sure the user is logged in before inserting a task
@@ -40,7 +43,7 @@ Meteor.methods({
   },
   'events.remove'(eventId) {
     check(eventId, String);
- 
+    UsersEvents.remove({eventId: eventId});
     Events.remove(eventId);
   },
   // 'events.up'

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import { Meteor } from 'meteor/meteor';
 
 import FlatButton from 'material-ui/FlatButton';
 import AssignmentTurnedIn from '../styles/icons/assignment-turned-in';
@@ -36,24 +37,17 @@ export default class NavBar extends Component {
   }
   componentDidMount() {
     this.setState({
-      selectedValue: this.getSelectedValue()
+      selectedValue: this.getSelectedValue(),
     })
   }
 
   componentWillReceiveProps() {
     this.setState({
-      selectedValue: this.getSelectedValue()
+      selectedValue: this.getSelectedValue(),
     })
   }
-
   render() {
     let styles = {
-      container: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '15px',
-        width: '200px',
-      },
       button: {
         textAlign: 'left',
         width: '170px',
@@ -67,10 +61,13 @@ export default class NavBar extends Component {
       },
     };
     return (
-      <div style={styles.container}>
+      <div style={this.props.style}>
         <FlatButton label='事件大厅' value='/' labelStyle={this.getLabelStyle('/')} icon={<HomeIcon mystyles={styles.icon} mycolor={this.getIconColor('/')} />}  onClick={this.handleClick.bind(this)} style={styles.button}/>
         <FlatButton label='我的预测' value='/done' labelStyle={this.getLabelStyle('/done')} icon={<AssignmentTurnedIn mystyles={styles.icon} mycolor={this.getIconColor('/done')} />} onClick={this.handleClick.bind(this)} style={styles.button}/>
-        <FlatButton label='管理' value='/admin' labelStyle={this.getLabelStyle('/admin')} icon={<SupervisorAccount mystyles={styles.icon} mycolor={this.getIconColor('/admin')} />} onClick={this.handleClick.bind(this)} style={styles.button}/>
+        { this.props.isAdmin ?
+          <FlatButton label='管理' value='/admin' labelStyle={this.getLabelStyle('/admin')} icon={<SupervisorAccount mystyles={styles.icon} mycolor={this.getIconColor('/admin')} />} onClick={this.handleClick.bind(this)} style={styles.button}/>
+          : ''
+        }
       </div>
     );
   }

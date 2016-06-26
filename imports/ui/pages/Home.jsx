@@ -46,7 +46,7 @@ export default class Home extends Component {
             </span>
           </div>
         </Paper>
-        <EventsList currentUser={this.props.currentUser} events={this.props.events}/>
+        <EventsList currentUser={this.props.currentUser} events={this.props.events} usersEvents={this.props.usersEvents} />
       </div>
     );
   }
@@ -55,4 +55,5 @@ export default class Home extends Component {
 Home.PropTypes = {
   currentUser: PropTypes.string.isRequired,
   events: PropTypes.array.isRequired,
+  usersEvents: PropTypes.array,
 };

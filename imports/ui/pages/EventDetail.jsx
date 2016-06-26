@@ -6,8 +6,6 @@ import {Card, CardHeader, CardMedia, CardActions, CardTitle, CardText} from 'mat
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import FavoriteIcon from '../styles/icons/favorite';
-import FavoriteBorderIcon from '../styles/icons/favorite-border';
 
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
@@ -15,6 +13,8 @@ import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 import UsersEvents from '../../api/usersevents.js';
 import {secondary_text,divider_color,white,accent_color,primary_color} from '../styles/colors';
 import {dateFormat} from '../../api/utils';
+import MarkdownEditor from '../components/MarkdownEditor';
+import CommentsList from '../components/CommentsList';
 
 export default class EventDetail extends Component {
   constructor(props) {
@@ -120,8 +120,7 @@ export default class EventDetail extends Component {
         paddingBottom: 50,
       },
       container: {
-        background: 'SlateGray',
-        paddingBottom: 150,
+        background: '#656998',//'SlateGray',
       },
       bigBanner: {
         background: 'url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/68939/ae.jpg) center 1%',
@@ -142,6 +141,14 @@ export default class EventDetail extends Component {
       centerText: {
         textAlign: 'center',
       },
+      editor: {
+        bottom: 0,
+        margin: '20px auto 100px',
+        width: '60%',
+      },
+      toolBarStyle: {
+        background: white,
+      },
     };
   	const { event, eventExists } = this.props;
   	// if (!eventExists) {
@@ -154,17 +161,19 @@ export default class EventDetail extends Component {
         </Card>
         <Card zDepth={2}>
           <CardMedia>
-            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68939/ae.jpg" />
+            <img src={event.pic} />
           </CardMedia>
         </Card>
         <Card style={styles.blockquote}>
           <CardText color={secondary_text}>{event.text}</CardText>
         </Card>
-        <Card style={styles.card}>
+        <Card style={styles.card} rounded={false}>
           <CardActions>
             {this.renderAnswers()}  
           </CardActions>
         </Card>
+        <CommentsList comments={this.props.comments}/>
+        <MarkdownEditor style={styles.editor} toolBarStyle={styles.toolBarStyle} event={event}/>
       </Paper>
     );
   }

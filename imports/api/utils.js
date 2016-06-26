@@ -34,3 +34,8 @@ export function dateFormat(date, formatStr)
   
     return str;   
 }
+
+export function findName(node) {
+    const parent = node.parentElement;
+    return parent.name ? parent.name : findName(parent);
+}

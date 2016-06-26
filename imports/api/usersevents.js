@@ -3,7 +3,6 @@ import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
  
 export const UsersEvents = new Mongo.Collection('usersevents');
-
 Meteor.methods({
 	'usersevents.insert': function(eventId,answerIndex,answer) {
     check(eventId, String);
@@ -29,7 +28,10 @@ Meteor.methods({
 
 if (Meteor.isServer) {
   // This code only runs on the server
-  Meteor.publish('usersevents', function tasksPublication() {
+  Meteor.publish('usersevents', function() {
     return UsersEvents.find();
+  });
+  Meteor.publish('usersEventsByUserId', function() {
+    return UsersEvents.find({userId: this.userId});
   });
 }
