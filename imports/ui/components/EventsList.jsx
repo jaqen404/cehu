@@ -21,7 +21,7 @@ export default class EventsList extends Component {
     };
     return (
         <Paper zDepth={1} style={styles.card}>
-          {this.renderEvents()}
+          {this.props.eventsIsReady ? this.renderEvents() : ''}
         </Paper>
     );
   }

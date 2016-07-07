@@ -21,8 +21,6 @@ export default class Comment extends Component {
           {this.props.comment.text}
         </CardText>
         <CardActions>
-          <FlatButton label="Action1" />
-          <FlatButton label="Action2" />
         </CardActions>
       </Card>
     );

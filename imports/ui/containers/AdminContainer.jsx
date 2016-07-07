@@ -10,7 +10,7 @@ export default createContainer(() => {
 	const isAdmin = Roles.userIsInRole(Meteor.userId(), 'super-admin');
 	console.log(isAdmin);
   return {
-     events: Events.find({}, { sort: { createdAt: -1 } }).fetch(),
+     events: Events.find({}, { sort: { score: -1 } }).fetch(),
      isAdmin: isAdmin,
   };
 }, Admin);

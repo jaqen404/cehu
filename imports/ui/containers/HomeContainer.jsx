@@ -7,12 +7,13 @@ import { UsersEvents } from '../../api/usersevents.js';
 
 export default createContainer(() => {
 	const currentUser = Meteor.userId();
-	Meteor.subscribe('events');
+	const eventsIsReady = Meteor.subscribe('events').ready();
 	Meteor.subscribe('usersEventsByUserId');
 	Meteor.subscribe('userData');
   return {
+  	eventsIsReady,
   	currentUser: currentUser,
-    events: Events.find({}, { sort: { createdAt: -1 } }).fetch(),
+    events: Events.find({}, { sort: { score: -1 } }).fetch(),
     usersEvents: UsersEvents.find().fetch(),
   };
 }, Home);

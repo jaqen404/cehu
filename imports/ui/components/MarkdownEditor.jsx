@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
+import Snackbar from 'material-ui/Snackbar';
 import marked from 'marked';
 import ActionVisibility from 'material-ui/svg-icons/action/visibility';
 import CommunicationImportContacts from 'material-ui/svg-icons/communication/import-contacts';
@@ -22,6 +23,7 @@ export default class MarkdownEditor extends Component {
       iconStates: {mode: 0},
       towColor: ['Gray', primary_color],
       iconsColor: {write: primary_color, preview: 'Gray', writePreview: 'Gray'},
+      snackbarOpen: false,
     };
   }
   // componentDidMount() {
@@ -34,7 +36,7 @@ export default class MarkdownEditor extends Component {
     this.isWriting = setTimeout(() => {
       const unmarkResult = this.refs.editor.input.refs.input.value;
       const mark = marked(unmarkResult);
-      this.setState({ result:  mark, unmarkResult: unmarkResult}) // change state
+      this.setState({ result:  mark, unmarkResult: unmarkResult}); // change state
     }, 300)
   }
   renderIconColor() {
@@ -60,7 +62,7 @@ export default class MarkdownEditor extends Component {
         flex: '1',
         minHeight: 100,
       },
-      toolBar: {
+      toolbar: {
         background: 'LightGray',
       },
       icon: {
@@ -75,7 +77,7 @@ export default class MarkdownEditor extends Component {
     }
     return (
       <div style={props.style}> 
-        <Toolbar style={props.toolBarStyle ? props.toolBarStyle : styles.toolBar}>
+        <Toolbar style={props.toolBarStyle ? props.toolBarStyle : styles.toolbar}>
           <ToolbarGroup>
             <FlatButton label="回复" primary={true} onClick={this.reply.bind(this)}/>
             <ToolbarSeparator />
@@ -97,11 +99,17 @@ export default class MarkdownEditor extends Component {
           <div style={styles.preview} ref={'preview'} dangerouslySetInnerHTML={{ __html: this.state.result }}>
           </div>
         </Paper>
+        <Snackbar
+          open={this.state.snackbarOpen}
+          message="请添加评论！"
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose.bind(this)}
+        />
       </div>
     );
   }
   handleClick(e) {
-    const name = findName(e.target);
+    const name = findName(e.target, 'name');
     let state = this.state;
     switch (name) {
       case "write":
@@ -127,12 +135,29 @@ export default class MarkdownEditor extends Component {
   }
   reply() {
     const input = this.refs.editor.input.refs.input;
-    const unmark = input.value;
-    input.value = '';
-    Meteor.call('comments.insert', this.props.event, unmark); 
+    const markInput = this.refs.preview;
+    const unmark = input.value.trim();
+    if (unmark == '') {
+      this.handleTouchTap();
+    } else {
+      input.value = '';
+      markInput.textContent = '';
+      Meteor.call('comments.insert', this.props.event, unmark); 
+    }
     // const path = "/admin";
     // browserHistory.push(path);
   }
+  handleTouchTap() {
+    this.setState({
+      snackbarOpen: true,
+    });
+  };
+
+  handleRequestClose() {
+    this.setState({
+      snackbarOpen: false,
+    });
+  };
 }
  
 MarkdownEditor.propTypes = {

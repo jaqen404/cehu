@@ -27,7 +27,7 @@ export default class Home extends Component {
         marginRight: 10,
       },
       large: {
-        padding: '5em 3em 5em',
+        padding: '5.5em',
       },
       bannerText: {
         color: pure_white,
@@ -46,7 +46,7 @@ export default class Home extends Component {
             </span>
           </div>
         </Paper>
-        <EventsList currentUser={this.props.currentUser} events={this.props.events} usersEvents={this.props.usersEvents} />
+        <EventsList eventsIsReady={this.props.eventsIsReady} currentUser={this.props.currentUser} events={this.props.events} usersEvents={this.props.usersEvents} />
       </div>
     );
   }

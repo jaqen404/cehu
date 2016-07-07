@@ -36,7 +36,7 @@ export default class EventDetail extends Component {
     if (props.event.rightIndex >= 0) {
       state.eventState = '揭晓结果：' + props.event.rightAnswer;
     } else if (!!props.event.publishDate || !!props.event.publishTime) {
-      const date = props.event.publishDate ? dateFormat(props.event.publishDate, 'yyyy-MM-dd') : '';
+      const date = props.event.publishDate ? dateFormat(props.event.publishDate, 'yyyy-MM-dd hh:mm') : '';
       const time = props.event.publishTime ? dateFormat(props.event.publishTime, 'hh:mm') : '';
       state.eventState = '揭晓结果：未揭晓，揭晓时间' + date + ' | ' + time;
     }
@@ -70,9 +70,13 @@ export default class EventDetail extends Component {
                 disabled={this.props.userEvent ? index != this.props.userEvent.answerIndex : false}
         />
       ));
+      const now = new Date();
+      const isClosed = this.props.event.closingDate >= now;
+      //预览模式、已预测、已揭晓、已截止，都不能预测，不显示确定button
       return answers ? <form onSubmit={this.handleSubmit.bind(this)}>
+                <h4>您的预测:</h4>
                 <RadioButtonGroup name="radios" ref ="radios" defaultSelected={this.props.userEvent ? this.props.userEvent.answerIndex : '0'}>{radioButtons}</RadioButtonGroup>
-                {!!this.props.isPreview || !!this.props.userEvent || this.props.event.rightIndex >= 0 ? '' : <FlatButton label="确定" type="submit"/>}
+                {!!this.props.isPreview || !!this.props.userEvent || this.props.event.rightIndex >= 0 || isClosed ? '' : <FlatButton label="确定" type="submit"/>}
                 {this.renderRsultRadioButton()}
               </form> : '';
     }
@@ -173,7 +177,7 @@ export default class EventDetail extends Component {
           </CardActions>
         </Card>
         <CommentsList comments={this.props.comments}/>
-        <MarkdownEditor style={styles.editor} toolBarStyle={styles.toolBarStyle} event={event}/>
+        {this.props.isPreview ? '' : <MarkdownEditor style={styles.editor} toolBarStyle={styles.toolBarStyle} event={event}/>}
       </Paper>
     );
   }

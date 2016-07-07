@@ -15,8 +15,8 @@ export function dateFormat(date, formatStr)
   
     str=str.replace(/yyyy|YYYY/,date.getFullYear());   
     str=str.replace(/yy|YY/,(date.getYear() % 100)>9?(date.getYear() % 100).toString():'0' + (date.getYear() % 100));   
-  
-    str=str.replace(/MM/,date.getMonth()>9?date.getMonth().toString():'0' + date.getMonth());   
+    let month = date.getMonth() + 1;
+    str=str.replace(/MM/,month>9?month.toString():'0' + month);   
     str=str.replace(/M/g,date.getMonth());   
   
     str=str.replace(/w|W/g,Week[date.getDay()]);   
@@ -35,7 +35,7 @@ export function dateFormat(date, formatStr)
     return str;   
 }
 
-export function findName(node) {
+export function findName(node, name='name') {
     const parent = node.parentElement;
-    return parent.name ? parent.name : findName(parent);
+    return parent[name] ? parent[name] : findName(parent, name);
 }

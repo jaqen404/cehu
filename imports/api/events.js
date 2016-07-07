@@ -24,7 +24,11 @@ Meteor.methods({
     // if (! Meteor.userId()) {
     //   throw new Meteor.Error('not-authorized');
     // }
- 		event['createdAt'] = new Date();
+    const now  = new Date();
+ 		event['updateAt'] = now;
+    const score = event.score ? event.score : 0;
+    event['score'] = Math.max(now.getTime(),score);
+    //存在id则是修改，不存在就新插入
  		if (event._id) {
  			//Events.save(event);
       const eventId = event._id;
@@ -38,7 +42,15 @@ Meteor.methods({
         );
       }
  		} else {
+      event['createdAt'] = now;
  			Events.insert(event);
+      //不能让每日都有的预测在版面上占太多，有新的插入时就让旧的沉没
+      const tags = new Set(event.tags);
+      if (tags.has('每日') && Meteor.isServer) {
+        const sinkEvent = Events.find({'tags': '每日'},{ sort: { score: -1 }, skip:2, limit:1}).fetch()[0];
+        const sankScore = sinkEvent.score - 2*24*60*60*1000;
+        Events.update(sinkEvent._id, { $set: {'score': sankScore} });
+      }
  		}
   },
   'events.remove'(eventId) {

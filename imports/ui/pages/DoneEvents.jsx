@@ -16,7 +16,7 @@ export default class DoneEvents extends Component {
     };
     return (
       <Paper zDepth={1} >
-        <EventsList currentUser={this.props.currentUser} events={this.props.events} usersEvents={this.props.usersEvents}/>
+        <EventsList eventsIsReady={this.props.eventsIsReady} currentUser={this.props.currentUser} events={this.props.events} usersEvents={this.props.usersEvents}/>
       </Paper>
     );
   }
