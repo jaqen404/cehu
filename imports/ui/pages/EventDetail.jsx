@@ -155,9 +155,9 @@ export default class EventDetail extends Component {
       editor: {
         bottom: 0,
         width: '100%',
+        margin: '20px auto 100px',
         '@media (min-width: 1045px)': {
           width: '60%',
-          margin: '20px auto 100px',
         },
       },
       toolBarStyle: {
@@ -195,7 +195,7 @@ export default class EventDetail extends Component {
         </div>
         <CommentsList comments={this.props.comments}/>
         <div style={styles.editor}>
-        {this.props.isPreview ? '' : <MarkdownEditor toolBarStyle={styles.toolBarStyle} event={event}/>}
+        {this.props.isPreview ? '' : <MarkdownEditor toolBarStyle={styles.toolBarStyle} event={event} currentUser={this.props.currentUser}/>}
         </div>
       </Paper>
       </StyleRoot>

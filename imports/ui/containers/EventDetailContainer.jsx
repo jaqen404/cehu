@@ -11,6 +11,7 @@ export default createContainer(({ params: { id } }) => {
   const event = Events.findOne(id);
   const eventExists = !!event;
   let userEvent = {};
+  const currentUser = Meteor.userId();
   //确保用户已登录，且存在这个事件
   if (!!Meteor.userId() && eventExists) {
   	userEvent = UsersEvents.findOne({userId: Meteor.userId(),eventId: event._id});
@@ -21,5 +22,6 @@ export default createContainer(({ params: { id } }) => {
     event: eventExists ? event : {},
     userEvent: userEvent,
     comments: Comments.find().fetch(),
+    currentUser: currentUser,
   };
 }, EventDetail);

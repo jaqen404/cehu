@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { browserHistory } from 'react-router';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
@@ -134,6 +135,11 @@ export default class MarkdownEditor extends Component {
     this.setState(state);
   }
   reply() {
+    if (!this.props.currentUser) {
+      const path = "/login";
+      browserHistory.push(path);
+      return;
+    }
     const input = this.refs.editor.input.refs.input;
     const markInput = this.refs.preview;
     const unmark = input.value.trim();
