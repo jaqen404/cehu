@@ -163,7 +163,6 @@ export default class NewEvent extends Component {
     return tags.map((tag,index) => 
       <Chip
         onRequestDelete={this.handleChipDelete.bind(this)}
-        onTouchTap={this.handleChipTouchTap}
         style={{margin: 4}}
         key={index}
       >

@@ -18,10 +18,10 @@ export default class LoginPage extends React.Component {
     const errors = {};
 
     if (!email) {
-      errors.email = 'Email required';
+      errors.email = '请填写邮箱';
     }
     if (!password) {
-      errors.password = 'Password required';
+      errors.password = '请填写密码';
     }
 
     this.setState({ errors });
@@ -42,32 +42,31 @@ export default class LoginPage extends React.Component {
   render() {
     const { errors } = this.state;
     const errorMessages = Object.keys(errors).map(key => errors[key]);
-    const errorClass = key => errors[key] && 'error';
 
     const content = (
-      <div className="wrapper-auth">
-        <h1 className="title-auth">Login.</h1>
-        <p className="subtitle-auth" >Signing in allows you to view private lists</p>
+      <div>
+        <h1>登录.</h1>
+        <p>登录后可以查看自己的预测</p>
         <form onSubmit={this.onSubmit}>
-          <div className="list-errors">
+          <div>
             {errorMessages.map(msg => (
-              <div className="list-item" key={msg}>{msg}</div>
+              <div key={msg}>{msg}</div>
             ))}
           </div>
-          <div className={`input-symbol ${errorClass('email')}`}>
-            <input type="email" name="email" ref="email" placeholder="Your Email"/>
-            <span className="icon-email" title="Your Email"></span>
+          <div>
+            <input type="email" name="email" ref="email" placeholder="邮箱"/>
+            <span title="邮箱"></span>
           </div>
-          <div className={`input-symbol ${errorClass('password')}`}>
-            <input type="password" name="password" ref="password" placeholder="Password"/>
-            <span className="icon-lock" title="Password"></span>
+          <div>
+            <input type="password" name="password" ref="password" placeholder="密码"/>
+            <span title="密码"></span>
           </div>
-          <button type="submit" className="btn-primary">Login</button>
+          <button type="submit">登录</button>
         </form>
       </div>  
     );
 
-    const link = <Link to="/register" className="link-auth-alt">Need an account? Join Now.</Link>;
+    const link = <Link to="/register" className="link-auth-alt">还没有账号? 马上注册.</Link>;
 
     return <AuthPage content={content} link={link}/>;
   }

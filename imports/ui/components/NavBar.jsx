@@ -4,9 +4,10 @@ import { Meteor } from 'meteor/meteor';
 
 import FlatButton from 'material-ui/FlatButton';
 import AssignmentTurnedIn from '../styles/icons/assignment-turned-in';
-import HomeIcon from '../styles/icons/home'
-import SupervisorAccount from '../styles/icons/supervisor-account'
-import {divider_color,secondary_text,primary_color,primary_text} from '../styles/colors'
+import HomeIcon from '../styles/icons/home';
+import SupervisorAccount from '../styles/icons/supervisor-account';
+import {divider_color,secondary_text,primary_color,primary_text} from '../styles/colors';
+import Radium, { StyleRoot } from 'radium';
 
 export default class NavBar extends Component {
   handleClick(e) {
@@ -61,6 +62,7 @@ export default class NavBar extends Component {
       },
     };
     return (
+      <StyleRoot>
       <div style={this.props.style}>
         <FlatButton label='事件大厅' value='/' labelStyle={this.getLabelStyle('/')} icon={<HomeIcon mystyles={styles.icon} mycolor={this.getIconColor('/')} />}  onClick={this.handleClick.bind(this)} style={styles.button}/>
         <FlatButton label='我的预测' value='/done' labelStyle={this.getLabelStyle('/done')} icon={<AssignmentTurnedIn mystyles={styles.icon} mycolor={this.getIconColor('/done')} />} onClick={this.handleClick.bind(this)} style={styles.button}/>
@@ -69,6 +71,7 @@ export default class NavBar extends Component {
           : ''
         }
       </div>
+      </StyleRoot>
     );
   }
 }
@@ -76,3 +79,4 @@ export default class NavBar extends Component {
 NavBar.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
+//export default Radium(NavBar);

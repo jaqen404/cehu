@@ -9,7 +9,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import { Meteor } from 'meteor/meteor';
-import {muiTheme} from '../styles/colors'
+import {muiTheme} from '../styles/colors';
+import Radium, { StyleRoot } from 'radium';
  
 // App component - represents the whole app
 export default class App extends Component {
@@ -28,14 +29,19 @@ export default class App extends Component {
       main: {
         width: '100%',
         height: '100%',
-        marginLeft: 200,
+        '@media (min-width: 626px)': {
+          marginLeft: 200,
+        },
       },
       navBar: {
-        position: 'fixed',
-        width: '200px',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '15px',
+        display: 'none',
+        '@media (min-width: 626px)': {
+          position: 'fixed',
+          width: '200px',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '15px',
+        },
       },
       appBar: {
         position: 'fixed',
@@ -43,6 +49,7 @@ export default class App extends Component {
       }
     };
     return (
+      <StyleRoot>
       <MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
       <div>
         <MyAppBar style={styles.appBar} onLeftIconButtonTouchTap={this.toggleDrawer.bind(this)} currentUser={this.props.currentUser}/>  
@@ -55,6 +62,7 @@ export default class App extends Component {
         </div>
       </div>
       </MuiThemeProvider>
+      </StyleRoot>
     );
   }
 }
@@ -62,3 +70,4 @@ export default class App extends Component {
 App.PropTypes = {
   currentUser: PropTypes.string.isRequired,
 };
+//export default Radium(App);

@@ -16,7 +16,6 @@ export default class EventsList extends Component {
   render() {
     const styles = {
       card: {
-        marginRight: 20,
       },
     };
     return (

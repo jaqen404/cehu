@@ -18,6 +18,12 @@ function toAdmin(nextState, replaceState) {
     //      replaceState(null, '/');
     // }
 }
+function toRegister(nextState, replace) {
+    const currentUser = Meteor.userId();
+    if (!currentUser) {
+         replace('/register');
+    }
+}
 export const renderRoutes = () => (
   <Router history={browserHistory}>
     <Route path='/' component={App} >
@@ -28,7 +34,7 @@ export const renderRoutes = () => (
     	<Route path='eventdetail/:id' component={EventDetail} />
     	<Route path="login" component={AuthPageLogin}/>
     	<Route path="register" component={AuthPageJoin}/>
-        <Route path="done" component={DoneEvents}/>
+        <Route path="done" component={DoneEvents} onEnter={toRegister}/>
     </Route>
   </Router>
 );

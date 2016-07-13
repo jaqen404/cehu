@@ -15,6 +15,7 @@ import {secondary_text,divider_color,white,accent_color,primary_color} from '../
 import {dateFormat} from '../../api/utils';
 import MarkdownEditor from '../components/MarkdownEditor';
 import CommentsList from '../components/CommentsList';
+import Radium, { StyleRoot } from 'radium';
 
 export default class EventDetail extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ export default class EventDetail extends Component {
       const time = props.event.publishTime ? dateFormat(props.event.publishTime, 'hh:mm') : '';
       state.eventState = '揭晓结果：未揭晓，揭晓时间' + date + ' | ' + time;
     }
-    if (props.userEvent) {
+    if (props.userEvent && props.userEvent._id) {
       state.myState = '我的预测：' + props.userEvent.answer;
     }
     if (props.event.rightIndex >= 0 && !!props.userEvent) {
@@ -117,11 +118,14 @@ export default class EventDetail extends Component {
       radioButton: {
         marginBottom: 16,
       },
-      card: {
+      answers: {
         marginRight: 'auto',
         marginLeft: 'auto',
-        width: '60%',
-        paddingBottom: 50,
+        width: '100%',
+        paddingBottom: 40,
+        '@media (min-width: 626px)': {
+          width: '60%',
+        },
       },
       container: {
         background: '#656998',//'SlateGray',
@@ -139,16 +143,22 @@ export default class EventDetail extends Component {
         background: white,
         marginLeft: 'auto',
         marginRight: 'auto',
-        width: '80%',
+        width: '100%',
         minWidth: 320,
+        '@media (min-width: 626px)': {
+          width: '80%',
+        },
       },
       centerText: {
         textAlign: 'center',
       },
       editor: {
         bottom: 0,
-        margin: '20px auto 100px',
-        width: '60%',
+        width: '100%',
+        '@media (min-width: 1045px)': {
+          width: '60%',
+          margin: '20px auto 100px',
+        },
       },
       toolBarStyle: {
         background: white,
@@ -159,26 +169,36 @@ export default class EventDetail extends Component {
   	// 	return <h1>not found</h1>
   	// }
     return (
+      <StyleRoot>
       <Paper zDepth={0} style={styles.container}>
-        <Card style={styles.blockquote}>
+        <div style={styles.blockquote}>
+        <Card>
           <CardTitle  title={event.title} subtitle={this.getResult()}/>
         </Card>
+        </div>
         <Card zDepth={2}>
           <CardMedia>
             <img src={event.pic} />
           </CardMedia>
         </Card>
-        <Card style={styles.blockquote}>
+        <div style={styles.blockquote}>
+        <Card>
           <CardText color={secondary_text}>{event.text}</CardText>
         </Card>
-        <Card style={styles.card} rounded={false}>
+        </div>
+        <div style={styles.answers}>
+        <Card rounded={false}>
           <CardActions>
             {this.renderAnswers()}  
           </CardActions>
         </Card>
+        </div>
         <CommentsList comments={this.props.comments}/>
-        {this.props.isPreview ? '' : <MarkdownEditor style={styles.editor} toolBarStyle={styles.toolBarStyle} event={event}/>}
+        <div style={styles.editor}>
+        {this.props.isPreview ? '' : <MarkdownEditor toolBarStyle={styles.toolBarStyle} event={event}/>}
+        </div>
       </Paper>
+      </StyleRoot>
     );
   }
 }
