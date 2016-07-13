@@ -162,7 +162,7 @@ export default class NewEvent extends Component {
     const tags = Array.from(this.state.tags);
     return tags.map((tag,index) => 
       <Chip
-        onRequestDelete={this.handleChipDelete.bind(this)}
+        onRequestDelete={this.handleChipDelete.bind(this)} 
         style={{margin: 4}}
         key={index}
       >
