@@ -8,15 +8,17 @@ import HomeIcon from '../styles/icons/home';
 import SupervisorAccount from '../styles/icons/supervisor-account';
 import {divider_color,secondary_text,primary_color,primary_text} from '../styles/colors';
 import Radium, { StyleRoot } from 'radium';
+import {findName} from '../../api/utils';
 
 export default class NavBar extends Component {
   handleClick(e) {
     e.preventDefault();
-    const isButton = e.target.parentElement; 
-    let path = isButton.value ? isButton.value : 
-              isButton.parentElement.value ? isButton.parentElement.value :
-              isButton.parentElement.parentElement.value ? isButton.parentElement.parentElement.value :
-              '/';
+    const isButton = e.target; 
+    let path = isButton.value ? isButton.value : findName(isButton,'value');
+              // isButton.value ? isButton.value : 
+              // isButton.parentElement.value ? isButton.parentElement.value :
+              // isButton.parentElement.parentElement.value ? isButton.parentElement.parentElement.value :
+              // '/';
     this.setState({
       selectedValue: path,
     });
