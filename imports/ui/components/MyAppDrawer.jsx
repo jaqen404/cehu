@@ -71,10 +71,13 @@ export default class MyAppDrawer extends Component {
             value={ '/done' }
             primaryText={ '我的预测' } 
             onTouchTap={this.handleToggle.bind(this)}/>
+          { this.props.isAdmin ?
           <ListItem
             value={ '/admin'  }
             primaryText={ '管理' } 
-            onTouchTap={this.handleToggle.bind(this)}/>
+            onTouchTap={this.handleToggle.bind(this)}/> 
+            : ''
+          }
         </SelectableList>
       </Drawer>
     );

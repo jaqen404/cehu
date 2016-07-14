@@ -39,7 +39,6 @@ export default class CommentsList extends Component {
   render() {
     const styles = {
       card: {
-        width: '80%',
         margin: '0 auto',
       },
       toolbar: {

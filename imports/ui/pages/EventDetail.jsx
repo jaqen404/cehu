@@ -160,6 +160,14 @@ export default class EventDetail extends Component {
           width: '60%',
         },
       },
+      comments: {
+        bottom: 0,
+        width: '100%',
+        margin: '15px auto',
+        '@media (min-width: 626px)': {
+          width: '80%',
+        },
+      },
       toolBarStyle: {
         background: white,
       },
@@ -193,7 +201,9 @@ export default class EventDetail extends Component {
           </CardActions>
         </Card>
         </div>
-        <CommentsList comments={this.props.comments}/>
+        <div style={styles.comments}>
+          <CommentsList comments={this.props.comments}/>
+        </div>
         <div style={styles.editor}>
         {this.props.isPreview ? '' : <MarkdownEditor toolBarStyle={styles.toolBarStyle} event={event} currentUser={this.props.currentUser}/>}
         </div>
