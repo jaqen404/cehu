@@ -36,6 +36,5 @@ export function dateFormat(date, formatStr)
 }
 
 export function findName(node, name='name') {
-    const parent = node.parentElement;
-    return parent[name] ? parent[name] : findName(parent, name);
+    return node[name] ? node[name] : findName(node.parentElement, name);
 }

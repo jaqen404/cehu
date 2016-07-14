@@ -122,7 +122,7 @@ export default class EventDetail extends Component {
         marginRight: 'auto',
         marginLeft: 'auto',
         width: '100%',
-        paddingBottom: 40,
+        paddingBottom: 20,
         '@media (min-width: 626px)': {
           width: '60%',
         },

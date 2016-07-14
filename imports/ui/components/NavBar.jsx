@@ -14,7 +14,7 @@ export default class NavBar extends Component {
   handleClick(e) {
     e.preventDefault();
     const isButton = e.target; 
-    let path = isButton.value ? isButton.value : findName(isButton,'value');
+    let path = findName(isButton,'value');
               // isButton.value ? isButton.value : 
               // isButton.parentElement.value ? isButton.parentElement.value :
               // isButton.parentElement.parentElement.value ? isButton.parentElement.parentElement.value :
