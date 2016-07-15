@@ -74,11 +74,11 @@ export default class EventDetail extends Component {
       const now = new Date();
       const isClosed = this.props.event.closingDate <= now;
       //预览模式、已预测、已揭晓、已截止，都不能预测，不显示确定button
-      const showButton = !this.props.isPreview || !this.props.userEvent || !this.props.event.rightIndex >= 0 || !isClosed;
+      const hideButton = !!this.props.isPreview || !!this.props.userEvent || !!this.props.event.rightIndex >= 0 || !!isClosed;
       return <form onSubmit={this.handleSubmit.bind(this)}>
                 <h4>您的预测:</h4>
                 <RadioButtonGroup name="radios" ref ="radios" defaultSelected={this.props.userEvent ? this.props.userEvent.answerIndex : '0'}>{radioButtons}</RadioButtonGroup>
-                { showButton ? <FlatButton label="确定" type="submit"/> : ''}
+                { hideButton ? '' : <FlatButton label="确定" type="submit"/>}
                 {this.renderRsultRadioButton()}
               </form>;
     } else {
