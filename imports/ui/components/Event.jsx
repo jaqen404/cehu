@@ -19,7 +19,7 @@ export default class Envent extends Component {
     const event = this.props.event;
     const userEvent = this.props.userEvent;
     const now = new Date();
-    const isClosed = event.closingDate >= now;
+    const isClosed = event.closingDate <= now;
     if (!userEvent && event.rightIndex < 0) {
       if (!isClosed) {
         //未预测，未揭晓，未截止

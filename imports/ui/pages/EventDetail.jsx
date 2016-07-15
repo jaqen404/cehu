@@ -41,7 +41,7 @@ export default class EventDetail extends Component {
       const time = props.event.publishTime ? dateFormat(props.event.publishTime, 'hh:mm') : '';
       state.eventState = '揭晓结果：未揭晓，揭晓时间' + date + ' | ' + time;
     }
-    if (props.userEvent && props.userEvent._id) {
+    if (props.userEvent) {
       state.myState = '我的预测：' + props.userEvent.answer;
     }
     if (props.event.rightIndex >= 0 && !!props.userEvent) {
@@ -72,14 +72,17 @@ export default class EventDetail extends Component {
         />
       ));
       const now = new Date();
-      const isClosed = this.props.event.closingDate >= now;
+      const isClosed = this.props.event.closingDate <= now;
       //预览模式、已预测、已揭晓、已截止，都不能预测，不显示确定button
-      return answers ? <form onSubmit={this.handleSubmit.bind(this)}>
+      const showButton = !this.props.isPreview || !this.props.userEvent || !this.props.event.rightIndex >= 0 || !isClosed;
+      return <form onSubmit={this.handleSubmit.bind(this)}>
                 <h4>您的预测:</h4>
                 <RadioButtonGroup name="radios" ref ="radios" defaultSelected={this.props.userEvent ? this.props.userEvent.answerIndex : '0'}>{radioButtons}</RadioButtonGroup>
-                {!!this.props.isPreview || !!this.props.userEvent || this.props.event.rightIndex >= 0 || isClosed ? '' : <FlatButton label="确定" type="submit"/>}
+                { showButton ? <FlatButton label="确定" type="submit"/> : ''}
                 {this.renderRsultRadioButton()}
-              </form> : '';
+              </form>;
+    } else {
+      return '';
     }
   }
   renderRsultRadioButton() {
@@ -103,18 +106,18 @@ export default class EventDetail extends Component {
   }
   handleSubmit(e) {
     e.preventDefault()
-    const answerIndex = this.refs.radios.state.selected;
-    const eventId = this.props.event._id;
-    const answer = this.props.event.answers[answerIndex];
-    Meteor.call('usersevents.insert', eventId, answerIndex, answer);
-    const path = "/admin";
+    let path = "/login";
+    if (this.props.currentUser) {
+      path = "/admin";
+      const answerIndex = this.refs.radios.state.selected;
+      const eventId = this.props.event._id;
+      const answer = this.props.event.answers[answerIndex];
+      Meteor.call('usersevents.insert', eventId, answerIndex, answer);
+    }
     browserHistory.push(path);
   }
   render() {
     const styles = {
-      block: {
-        maxWidth: 250,
-      },
       radioButton: {
         marginBottom: 16,
       },
@@ -144,7 +147,6 @@ export default class EventDetail extends Component {
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '100%',
-        minWidth: 320,
         '@media (min-width: 626px)': {
           width: '80%',
         },

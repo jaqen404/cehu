@@ -15,6 +15,8 @@ export default createContainer(({ params: { id } }) => {
   //确保用户已登录，且存在这个事件
   if (!!Meteor.userId() && eventExists) {
   	userEvent = UsersEvents.findOne({userId: Meteor.userId(),eventId: event._id});
+  } else {
+    userEvent = null;
   }
   Meteor.subscribe('commentsByEventId', event && event._id);
   return {
