@@ -132,6 +132,7 @@ export default class EventDetail extends Component {
       },
       container: {
         background: '#656998',//'SlateGray',
+        height: '100%',
       },
       bigBanner: {
         background: 'url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/68939/ae.jpg) center 1%',
@@ -157,7 +158,7 @@ export default class EventDetail extends Component {
       editor: {
         bottom: 0,
         width: '100%',
-        margin: '20px auto 100px',
+        margin: '20px auto 0px',
         '@media (min-width: 1045px)': {
           width: '60%',
         },
